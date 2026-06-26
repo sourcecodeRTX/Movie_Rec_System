@@ -1,0 +1,65 @@
+/* Custom Styling for a Premium Look */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Make the navigation bar look like a modern streaming site */
+.navbar {
+    background: linear-gradient(90deg, #0f2027 0%, #203a43 50%, #2c5364 100%) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Add a smooth hover animation to all movie cards */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Round the buttons slightly for a modern feel */
+.btn {
+    border-radius: 25px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+}
+
+/* Add a subtle fade-in animation for page loads */
+.container {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Fix Movie Poster Cropping for All Screens */
+.card-img-top {
+    height: auto !important; 
+    aspect-ratio: 2 / 3; 
+    object-fit: cover !important; 
+    object-position: top !important; 
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+    .card-body h5, .card-body h6 {
+        /* Make movie titles slightly smaller on phones */
+        font-size: 1rem; 
+    }
+    
+    .btn-sm {
+        /* Make buttons easier to tap on mobile */
+        font-size: 0.75rem;
+        padding: 0.4rem;
+    }
+}
