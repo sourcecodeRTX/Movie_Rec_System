@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import MovieCard, { Movie } from "@/components/MovieCard";
+import { API_BASE_URL } from "@/config";
 
 export default function DiscoverPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,7 +23,7 @@ export default function DiscoverPage() {
 
     async function loadTrending() {
       try {
-        const response = await fetch("https://movie-rec-system-oanl.onrender.com/api/trending");
+        const response = await fetch(`${API_BASE_URL}/api/trending`);
         if (response.ok) {
           const data = await response.json();
           setTrendingMovies(data);
@@ -37,7 +38,7 @@ export default function DiscoverPage() {
     async function loadRecommendations(email: string) {
       try {
         const response = await fetch(
-          `https://movie-rec-system-oanl.onrender.com/api/recommendations/user/${encodeURIComponent(email)}`
+          `${API_BASE_URL}/api/recommendations/user/${encodeURIComponent(email)}`
         );
         if (response.ok) {
           const data = await response.json();
@@ -62,7 +63,7 @@ export default function DiscoverPage() {
     setHasSearched(true);
     try {
       const response = await fetch(
-        `https://movie-rec-system-oanl.onrender.com/api/movies/search?title=${encodeURIComponent(searchQuery)}`
+        `${API_BASE_URL}/api/movies/search?title=${encodeURIComponent(searchQuery)}`
       );
       if (response.ok) {
         const data = await response.json();

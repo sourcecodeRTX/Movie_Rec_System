@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import MovieCard, { Movie } from "@/components/MovieCard";
+import { API_BASE_URL } from "@/config";
 
 interface Analytics {
   totalUsers: number;
@@ -29,7 +30,7 @@ export default function DashboardPage() {
 
     async function fetchAnalytics() {
       try {
-        const response = await fetch("https://movie-rec-system-oanl.onrender.com/api/analytics/dashboard");
+        const response = await fetch(`${API_BASE_URL}/api/analytics/dashboard`);
         if (response.ok) {
           const data = await response.json();
           setAnalytics(data);
@@ -43,7 +44,7 @@ export default function DashboardPage() {
 
     async function fetchMovies() {
       try {
-        const response = await fetch("https://movie-rec-system-oanl.onrender.com/api/movies");
+        const response = await fetch(`${API_BASE_URL}/api/movies`);
         if (response.ok) {
           const data = await response.json();
           setMovies(data);

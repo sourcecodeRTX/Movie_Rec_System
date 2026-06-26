@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "@/config";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function RegisterPage() {
     setErrorMsg(null);
 
     try {
-      const response = await fetch("https://movie-rec-system-oanl.onrender.com/api/auth/register", {
+      const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: name, email: email, password: password }),

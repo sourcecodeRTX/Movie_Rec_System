@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import MovieCard, { Movie } from "@/components/MovieCard";
+import { API_BASE_URL } from "@/config";
 
 interface WatchlistItem {
   id: string | number;
@@ -22,7 +23,7 @@ export default function WatchlistPage() {
     try {
       // 1. Fetch watchlist items for user
       const watchResponse = await fetch(
-        `https://movie-rec-system-oanl.onrender.com/api/watchlist/user/${encodeURIComponent(userEmail)}`
+        `${API_BASE_URL}/api/watchlist/user/${encodeURIComponent(userEmail)}`
       );
       if (!watchResponse.ok) {
         setWatchlistMovies([]);
@@ -38,7 +39,7 @@ export default function WatchlistPage() {
       }
 
       // 2. Fetch all movies to resolve details
-      const moviesResponse = await fetch("https://movie-rec-system-oanl.onrender.com/api/movies");
+      const moviesResponse = await fetch(`${API_BASE_URL}/api/movies`);
       if (!moviesResponse.ok) {
         setWatchlistMovies([]);
         setLoading(false);
@@ -73,7 +74,7 @@ export default function WatchlistPage() {
 
     try {
       const response = await fetch(
-        `https://movie-rec-system-oanl.onrender.com/api/watchlist/user/${encodeURIComponent(
+        `${API_BASE_URL}/api/watchlist/user/${encodeURIComponent(
           userEmail
         )}/movie/${movieId}`,
         { method: "DELETE" }

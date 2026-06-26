@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Movie } from "@/components/MovieCard";
+import { API_BASE_URL } from "@/config";
 
 interface Review {
   id: string | number;
@@ -31,7 +32,7 @@ export default function MovieDetailsPage({ params }: { params: Promise<{ id: str
 
   const loadMovie = async () => {
     try {
-      const response = await fetch("https://movie-rec-system-oanl.onrender.com/api/movies");
+      const response = await fetch(`${API_BASE_URL}/api/movies`);
       if (response.ok) {
         const movies: Movie[] = await response.json();
         const found = movies.find((m) => String(m.id) === String(movieId));
@@ -50,7 +51,7 @@ export default function MovieDetailsPage({ params }: { params: Promise<{ id: str
 
   const loadReviews = async () => {
     try {
-      const response = await fetch(`https://movie-rec-system-oanl.onrender.com/api/reviews/movie/${movieId}`);
+      const response = await fetch(`${API_BASE_URL}/api/reviews/movie/${movieId}`);
       if (response.ok) {
         const data = await response.json();
         setReviews(data);
@@ -74,7 +75,7 @@ export default function MovieDetailsPage({ params }: { params: Promise<{ id: str
 
     setAddingWatchlist(true);
     try {
-      const response = await fetch("https://movie-rec-system-oanl.onrender.com/api/watchlist", {
+      const response = await fetch(`${API_BASE_URL}/api/watchlist`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: userEmail, movieId: movieId }),
@@ -107,7 +108,7 @@ export default function MovieDetailsPage({ params }: { params: Promise<{ id: str
     };
 
     try {
-      const response = await fetch("https://movie-rec-system-oanl.onrender.com/api/reviews", {
+      const response = await fetch(`${API_BASE_URL}/api/reviews`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reviewData),

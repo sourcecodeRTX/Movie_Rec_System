@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
+import { API_BASE_URL } from "@/config";
 
 export default function AddMoviePage() {
   const router = useRouter();
@@ -43,7 +44,7 @@ export default function AddMoviePage() {
     };
 
     try {
-      const response = await fetch("https://movie-rec-system-oanl.onrender.com/api/movies", {
+      const response = await fetch(`${API_BASE_URL}/api/movies`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(movieData),

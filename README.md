@@ -46,10 +46,10 @@ A modern, feature-rich movie recommendation platform built with **Spring Boot**,
 - Real-time statistics visualization
 
 ### 📱 **Responsive UI Design**
-- Mobile-first design with Bootstrap 5
-- Smooth hover animations and transitions
-- Modern gradient navbar
-- Optimized movie poster aspect ratios
+- Mobile-first responsive layouts
+- Sleek dark theme with rich aesthetics
+- Interactive cards, micro-animations, and hover transitions
+- Responsive movie card grid with optimized poster aspect ratios
 
 ---
 
@@ -58,12 +58,12 @@ A modern, feature-rich movie recommendation platform built with **Spring Boot**,
 ```
 Movie Recommendation Platform
 │
-├── Frontend (HTML/CSS/JavaScript + Bootstrap)
+├── Frontend (Next.js + React + TypeScript + Tailwind CSS)
 │   ├── Authentication Pages (Login/Register)
-│   ├── Dashboard with Analytics
-│   ├── Movie Discovery & Search
-│   ├── Movie Details & Reviews
-│   └── Personal Watchlist
+│   ├── Dashboard with Analytics & Movie Catalog
+│   ├── Discovery & Search (Recommendations, Trending, Search bar)
+│   ├── Movie Details & Reviews (Individual page + review submissions)
+│   └── Personal Watchlist (Bookmarking and saving movies)
 │
 └── Backend (Spring Boot + MongoDB)
     ├── REST API Endpoints
@@ -100,11 +100,11 @@ The platform includes a PIN-based admin authentication system:
 ### **Frontend**
 | Technology | Purpose |
 |-----------|---------|
-| **HTML5** | Semantic markup |
-| **CSS3** | Custom styling with animations |
-| **JavaScript (ES6+)** | Client-side logic & API calls |
-| **Bootstrap 5.3.0** | Responsive UI framework |
-| **Fetch API** | HTTP requests to backend |
+| **Next.js 16 (App Router)** | React meta-framework |
+| **React 19** | Dynamic component-driven UI |
+| **TypeScript** | Static type safety and developer productivity |
+| **Tailwind CSS v4** | Modern, utility-first UI styling |
+| **Fetch API** | HTTP requests to backend endpoints |
 
 ### **Database**
 | Technology | Purpose |
@@ -359,107 +359,64 @@ public DashboardStats getDashboardData() {
 
 ---
 
-### 6️⃣ **Dynamic Frontend with Async/Await**
+### 6️⃣ **Dynamic Frontend with React and TypeScript**
 
-Modern JavaScript with proper error handling:
+Modern Next.js server/client state management with proper error handling:
 
-```javascript
-// dashboard.html - Async Data Loading with Error Handling
-async function loadMovies() {
-    try {
-        const response = await fetch('https://movie-rec-system-oanl.onrender.com/api/movies');
-        if (response.ok) {
-            const movies = await response.json();
-            const movieGrid = document.getElementById('movieGrid');
-            
-            if (movies.length === 0) {
-                movieGrid.innerHTML = '<p class="text-muted">No movies available.</p>';
-                return;
-            }
-
-            movies.forEach(movie => {
-                const movieCard = `
-                    <div class="col-6 col-md-4 col-lg-3 mb-4">
-                        <div class="card h-100 shadow-sm">
-                            <img src="${movie.posterUrl}" class="card-img-top" 
-                                 alt="Movie Poster" style="height: 350px; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title">${movie.title}</h5>
-                                <p class="card-text text-muted mb-1">${movie.year} | ${movie.genre}</p>
-                                <p class="card-text small text-truncate">${movie.description}</p>
-                            </div>
-                            <div class="card-footer bg-white border-top-0 pb-3">
-                                <a href="movie-details.html?id=${movie.id}" 
-                                   class="btn btn-outline-primary btn-sm w-100">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                movieGrid.innerHTML += movieCard;
-            });
-        }
-    } catch (error) {
-        console.error('Error loading movies:', error);
+```typescript
+// dashboard/page.tsx - React State Loading with Error Handling
+async function fetchMovies() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/movies`);
+    if (response.ok) {
+      const data = await response.json();
+      setMovies(data);
     }
+  } catch (error) {
+    console.error("Error loading movies:", error);
+  } finally {
+    setLoadingMovies(false);
+  }
 }
 ```
 
 **Why it's impressive:**
-- Modern async/await syntax (cleaner than callbacks)
-- Comprehensive error handling
-- Dynamic DOM manipulation
-- Responsive grid layout generation
+- Type-safe components and API payloads using TypeScript interfaces
+- React hooks-based state lifecycle management (`useState`, `useEffect`)
+- Seamless rendering with dynamic page updates and custom CSS transition layers
 
 ---
 
 ### 8️⃣ **Admin PIN Authentication System**
 
-Secure role-based access control for movie management:
+Secure role-based access control for movie management on the frontend:
 
-```javascript
-// dashboard.html - PIN-based Admin Authentication
-// Authenticate user on page load
-const userEmail = localStorage.getItem('loggedInUser');
-
-if (!userEmail) {
-    window.location.href = 'index.html';
-} else {
-    document.getElementById('userDisplay').innerText = "Welcome, " + userEmail;
-}
-
-// Toggle buttons based on admin status
-if (localStorage.getItem('isAdmin') === 'true') {
-    document.getElementById('adminNavBtn').style.display = 'none';
-    document.getElementById('addMovieNavBtn').style.display = 'block';
-}
-
-// Function to verify the 6-digit admin PIN
-function verifyPin() {
-    const pin = prompt("Enter 6-digit Admin PIN:");
-    
-    // Check if input matches the Base64 encoded PIN
-    if (pin && btoa(pin) === 'OTA1NjMz') {
-        localStorage.setItem('isAdmin', 'true');
-        window.location.reload(); // Reload to update navbar UI
-    } else if (pin) {
+```typescript
+// components/Navbar.tsx - PIN-based Admin Authentication
+const verifyPin = () => {
+  const pin = prompt("Enter 6-digit Admin PIN:");
+  if (pin) {
+    try {
+      if (btoa(pin) === "OTA1NjMz") {
+        localStorage.setItem("isAdmin", "true");
+        setIsAdmin(true);
+        alert("Admin access granted!");
+        window.dispatchEvent(new Event("storage"));
+        router.refresh();
+      } else {
         alert("Security Alert: Incorrect PIN!");
+      }
+    } catch (err) {
+      console.error("Encoding error:", err);
     }
-}
-
-// Logout function to clear session and admin status
-function logoutAdmin() {
-    localStorage.removeItem('loggedInUser');
-    localStorage.removeItem('isAdmin');
-    window.location.href = 'index.html';
-}
+  }
+};
 ```
 
 **Why it's impressive:**
-- Role-based access control without backend authentication
-- Base64 encoding for basic PIN obfuscation
-- Dynamic UI changes based on authentication status
-- Persistent admin session across page reloads
-- Secure logout clears all credentials
+- Native browser dialog verification with Base64 encoding comparison
+- Instant state changes triggered via standard local storage updates
+- Dynamic client-side routing checks prevent unauthorized page entry (e.g. `/add-movie`)
 
 ---
 
@@ -536,15 +493,23 @@ Movie Recommendation/
 │   │   └── application.properties           # MongoDB configuration
 │   └── pom.xml                              # Maven dependencies
 │
-└── frontend/
-    ├── index.html                           # User login page
-    ├── register.html                        # User registration
-    ├── dashboard.html                       # Main dashboard with analytics
-    ├── discover.html                        # Search, trending, recommendations
-    ├── movie-details.html                   # Movie details + reviews
-    ├── watchlist.html                       # Personal watchlist
-    ├── add-movie.html                       # Add new movie form
-    └── style.css                            # Custom styling
+├── frontend/                                # Next.js Web App
+│   ├── src/
+│   │   ├── config.ts                        # Global API base URL configuration
+│   │   ├── components/                      # Shared UI components (Navbar, MovieCard)
+│   │   └── app/                             # Next.js App Router Pages
+│   │       ├── page.tsx                     # Login Page (root)
+│   │       ├── register/                    # User registration page
+│   │       ├── dashboard/                   # Platform analytics & catalog page
+│   │       ├── discover/                    # Search, trending & recommendations page
+│   │       ├── watchlist/                   # Watchlist page
+│   │       ├── add-movie/                   # Admin portal to add movies
+│   │       └── movie/[id]/                  # Movie details & reviews page
+│   ├── next.config.ts                       # Next.js configuration
+│   ├── package.json                         # Build scripts & dependencies
+│   └── tsconfig.json                        # TypeScript configuration
+│
+└── frontend-old/                            # Legacy Bootstrap HTML/CSS pages
 ```
 
 ---
@@ -589,20 +554,33 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-The backend will start on `https://movie-rec-system-oanl.onrender.com`
+The backend will start on `http://localhost:8080` (or your configured port).
 
 #### 5. **Launch Frontend**
-Open `frontend/index.html` in your browser or use a live server:
+Install frontend dependencies and start the Next.js development server:
 ```bash
-# Using Python
 cd frontend
-python -m http.server 3000
-
-# Using Node.js (http-server)
-npx http-server frontend -p 3000
+pnpm install
+pnpm run dev
 ```
 
-Access the application at `http://localhost:3000`
+Access the application locally at `http://localhost:3000`.
+
+---
+
+## 🚀 Vercel Deployment (Frontend)
+
+To deploy the Next.js frontend to **Vercel**:
+
+1. **Import the Repository**: Connect your GitHub repository to Vercel.
+2. **Configure Project Settings**:
+   - **Framework Preset**: Next.js
+   - **Root Directory**: `frontend`
+   - **Build Command**: `pnpm run build` or `next build`
+   - **Output Directory**: `.next`
+3. **Environment Variables**:
+   - Add `NEXT_PUBLIC_API_URL` under Environment Variables and set it to your deployed Spring Boot backend URL (e.g., `https://movie-rec-system-oanl.onrender.com`).
+4. **Deploy**: Click **Deploy**. Vercel will build and serve your Next.js application automatically!
 
 ---
 
